@@ -2,7 +2,7 @@
 
 **Author:** Tin Erispe (ETHPH) · April 2026
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19698658.svg)](https://doi.org/10.5281/zenodo.19698658)
+[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.19698658-blue)](https://doi.org/10.5281/zenodo.19698658)
 
 This repository contains the research paper and an accompanying interactive diagnostic tool for the **Cryptographic Agility Score (CAS)** framework.
 
