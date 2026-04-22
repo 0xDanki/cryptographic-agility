@@ -1,29 +1,57 @@
-# Measuring Cryptographic Agility in Deployed Systems
+# Cryptographic Agility Score (CAS)
 
-**Author:** Tin Erispe (ETHPH) · April 2026
+**Tin Erispe · ETHPH · April 2026**
 
 [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.19698658-blue)](https://doi.org/10.5281/zenodo.19698658)
 
-This repository contains the research paper and an accompanying interactive diagnostic tool for the **Cryptographic Agility Score (CAS)** framework.
+---
+
+Cryptographic agility is not a best practice. It is an architectural property, determined by where in a system the primitive dependency lives.
+
+This repository contains the CAS framework: a nine-dimension scoring model for evaluating migration readiness in deployed cryptographic systems, applied comparatively to TLS and ZK rollups. It ships as a [research paper](#paper) and a [runnable diagnostic tool](#diagnostic-tool).
 
 ---
 
-## The Paper
+## Diagnostic Tool
 
-**[Measuring_Cryptographic_Agility_Erispe.pdf](./Measuring_Cryptographic_Agility_Erispe.pdf)**
+[`cas-diagnostic/`](./cas-diagnostic/) — React + Vite + TypeScript
 
-The paper proposes CAS: a nine-dimension semi-formal framework for evaluating how structurally capable a deployed system is of migrating its cryptographic primitives.
+Nine questions. One per dimension. The tool scores your system, classifies it into an agility band, and generates a structured diagnosis: primary constraint, critical dimensions, migration difficulty, and dimension-specific risk flags.
 
-**Central thesis:** Cryptographic agility is an architectural property determined by the system layer at which the primitive is anchored. Systems that anchor primitives at negotiation layers achieve agility structurally. Systems that anchor them at execution layers do not.
+No backend. No data collection. All logic is in the source.
 
-**Case studies:** TLS 1.3 (20/27 — High Agility) vs. ZK rollup proof system migration (8/27 — Critical Constraint).
+**Try it online:** _deployment link coming soon_
 
-**Key finding:** ZK rollups score critically low not due to poor engineering, but because ZK circuits exist *inside* a specific algebraic universe — a finite field, curve, and hash function that saturate every constraint. This is mathematical rigidity, distinct from architectural rigidity, and requires different remediation strategies.
+**Run locally:**
 
-**Dimensions scored (each 0–3):**
+```bash
+cd cas-diagnostic
+npm install
+npm run dev
+# → http://localhost:5173
+```
 
-| ID | Dimension |
-|----|-----------|
+---
+
+## Paper
+
+[`Measuring_Cryptographic_Agility_Erispe.pdf`](./Measuring_Cryptographic_Agility_Erispe.pdf)
+
+The central claim: a system anchoring its cryptographic primitive at a negotiation layer achieves agility structurally. A system anchoring it at an execution layer does not. This is not an engineering quality judgment; it is a consequence of where the dependency lives.
+
+The paper develops this into a scored framework and applies it to two structurally dissimilar systems:
+
+- **TLS 1.3 — 20/27 (High Agility).** Cipher suite selection is a handshake-layer decision. The record layer is algorithmically agnostic. Agility is structural.
+- **ZK rollup proof system migration — 8/27 (Critical Constraint).** The verifier contract encodes the algorithm at the bytecode level. A ZK circuit does not call a cryptographic library; it exists inside an algebraic universe defined by a specific finite field, curve, and hash function. Changing the proof system is not a module swap. It is a re-expression of the computation in a different algebraic universe.
+
+The paper names this distinction (architectural rigidity vs. mathematical rigidity) and derives design principles and Ethereum PQC migration recommendations from it.
+
+### Dimensions
+
+Each scored 0–3. Composite out of 27.
+
+| | Dimension |
+|--|-----------|
 | D1 | Substitutability |
 | D2 | Migration Cost |
 | D3 | State & Interface Continuity |
@@ -34,52 +62,7 @@ The paper proposes CAS: a nine-dimension semi-formal framework for evaluating ho
 | D8 | Cryptographic Isolation |
 | D9 | Identity Coupling |
 
-D9 (Identity Coupling) is a novel contribution: it captures the Ethereum address derivation problem (`address = keccak256(pubkey)[12:]`), where migrating the signature scheme destroys historical identity associations — a migration barrier absent from prior agility frameworks.
-
----
-
-## CAS Diagnostic Tool
-
-An interactive web application that guides engineers through the nine CAS dimensions and produces a scored diagnostic report for any deployed system.
-
-**Source:** [`cas-diagnostic/`](./cas-diagnostic/)
-
-### Running locally
-
-```bash
-cd cas-diagnostic
-npm install
-npm run dev
-```
-
-Then open `http://localhost:5173` in your browser.
-
-### Features
-
-- 9 structured questions, one per CAS dimension
-- Scores 0–27 with band classification (High / Moderate / Critical Constraint)
-- Dimension breakdown with per-score explanations grounded in the framework
-- Rule-based system diagnosis (primary constraint, migration difficulty, dimension-specific risk flags)
-- Keyboard shortcuts (1–4 to select, Enter to advance)
-- Copy results as plain text for reports and issue trackers
-- No backend, no data collection
-
----
-
-## Repository Structure
-
-```
-.
-├── Measuring_Cryptographic_Agility_Erispe.pdf   # The paper
-└── cas-diagnostic/                               # Diagnostic tool (React + Vite + TypeScript)
-    ├── src/
-    │   ├── data/          # Dimension definitions and scoring bands
-    │   ├── types/         # TypeScript interfaces
-    │   ├── lib/           # Scoring and diagnosis logic
-    │   └── components/    # UI components
-    ├── package.json
-    └── ...
-```
+D9 is a novel contribution. It captures a migration barrier absent from prior frameworks: when system identities are derived from the primitive being replaced (`address = keccak256(pubkey)[12:]`), migration re-derives the identity, destroying accumulated state, permissions, and history with no atomic transition guarantee.
 
 ---
 
@@ -94,9 +77,7 @@ ETHPH. https://doi.org/10.5281/zenodo.19698658
 
 ## License
 
-| Component | License |
-|-----------|---------|
-| Diagnostic tool (`cas-diagnostic/`) | [MIT](./LICENSE) |
-| Paper (`Measuring_Cryptographic_Agility_Erispe.pdf`) | [CC BY 4.0](./LICENSE-paper) |
-
-The paper may be freely shared and adapted with attribution. The diagnostic tool may be freely used, modified, and distributed under the MIT license.
+| | License |
+|--|---------|
+| `cas-diagnostic/` | [MIT](./LICENSE) |
+| Paper | [CC BY 4.0](./LICENSE-paper) |
