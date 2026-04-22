@@ -1,0 +1,153 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Design tokens ─────────────────────────────────────── */
+:root {
+  --bg:        #05080f;
+  --surface:   #0c1120;
+  --border:    #1a2235;
+  --border-h:  #253045;
+  --blue:      #3b82f6;
+  --blue-dim:  rgba(59, 130, 246, 0.08);
+}
+
+/* ── Base ───────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: #e2e8f0;
+  min-height: 100vh;
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+.mono {
+  font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+}
+
+/* ── Subtle grid background (intro + question screens) ─── */
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(59, 130, 246, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(59, 130, 246, 0.035) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+
+/* ── Card ───────────────────────────────────────────────── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+}
+
+/* ── Option cards ───────────────────────────────────────── */
+.opt {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  cursor: pointer;
+  transition: border-color 0.12s ease, background 0.12s ease;
+}
+.opt:hover:not(.active) {
+  border-color: var(--border-h);
+  background: rgba(255, 255, 255, 0.02);
+}
+.opt.active {
+  border-color: var(--blue);
+  background: var(--blue-dim);
+}
+
+/* ── Input ──────────────────────────────────────────────── */
+input[type='text'] {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  color: #e2e8f0;
+  outline: none;
+  transition: border-color 0.12s ease;
+  width: 100%;
+}
+input[type='text']:focus  { border-color: var(--blue); }
+input[type='text']::placeholder { color: #2d3f58; }
+
+/* ── Buttons ────────────────────────────────────────────── */
+.btn-primary {
+  background: var(--blue);
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.12s ease;
+}
+.btn-primary:hover   { background: #2563eb; }
+.btn-primary:active  { background: #1d4ed8; }
+.btn-primary:disabled {
+  background: var(--surface);
+  color: #2d3f58;
+  border: 1px solid var(--border);
+  cursor: not-allowed;
+}
+
+.btn-ghost {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: #64748b;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: border-color 0.12s ease, color 0.12s ease;
+}
+.btn-ghost:hover { border-color: var(--border-h); color: #94a3b8; }
+
+/* ── Animations ─────────────────────────────────────────── */
+.fade {
+  animation: fadeUp 0.22s ease both;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0);   }
+}
+
+.prog-fill {
+  transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dim-fill {
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── SVG score ring ─────────────────────────────────────── */
+.score-ring {
+  transition: stroke-dashoffset 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Band colour helpers ────────────────────────────────── */
+.band-green-score { color: #22c55e; }
+.band-amber-score { color: #f59e0b; }
+.band-red-score   { color: #ef4444; }
+
+.band-green-ring { stroke: #22c55e; }
+.band-amber-ring { stroke: #f59e0b; }
+.band-red-ring   { stroke: #ef4444; }
+
+.band-green-badge {
+  background: rgba(20, 83, 45, 0.3);
+  border: 1px solid #166534;
+  color: #86efac;
+}
+.band-amber-badge {
+  background: rgba(78, 63, 0, 0.3);
+  border: 1px solid #92400e;
+  color: #fcd34d;
+}
+.band-red-badge {
+  background: rgba(69, 10, 10, 0.3);
+  border: 1px solid #991b1b;
+  color: #fca5a5;
+}
+
+/* ── Scrollbar ──────────────────────────────────────────── */
+::-webkit-scrollbar       { width: 3px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
