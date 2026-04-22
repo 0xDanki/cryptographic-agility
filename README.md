@@ -2,6 +2,8 @@
 
 **Author:** Tin Erispe (ETHPH) · April 2026
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19698658.svg)](https://doi.org/10.5281/zenodo.19698658)
+
 This repository contains the research paper and an accompanying interactive diagnostic tool for the **Cryptographic Agility Score (CAS)** framework.
 
 ---
@@ -85,7 +87,7 @@ Then open `http://localhost:5173` in your browser.
 
 ```
 Erispe, T. (2026). A Framework for Evaluating Cryptographic Agility in Deployed Systems.
-ETHPH. April 2026.
+ETHPH. https://doi.org/10.5281/zenodo.19698658
 ```
 
 ---
